@@ -6,145 +6,189 @@
 <title>Happy Birthday 🤍</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
 body{
-  background:linear-gradient(135deg,#fff1f2,#fde2e4);
+  background: linear-gradient(135deg,#f472b6,#fbcfe8,#ffffff);
   min-height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
+  overflow:hidden;
 }
 
+/* FLOATING HEART */
+.hearts{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+}
+
+.heart-float{
+  position:absolute;
+  bottom:-40px;
+  opacity:.4;
+  animation:floatUp linear infinite;
+}
+
+/* CARD */
 .card{
-  background:rgba(255,255,255,.9);
+  position:relative;
+  z-index:2;
+  background:rgba(255,255,255,.95);
   padding:32px;
-  border-radius:24px;
-  width:90%;
-  max-width:420px;
+  border-radius:26px;
+  width:420px;
   text-align:center;
-  box-shadow:0 30px 60px rgba(0,0,0,.12);
-  animation:fadeUp 1.2s ease;
+  box-shadow:0 30px 60px rgba(244,114,182,.35);
 }
 
 h2{
   font-size:28px;
   font-weight:600;
-  letter-spacing:.5px;
 }
+
 .name{
   margin-top:8px;
   font-size:18px;
-  color:#777;
+  color:#888;
 }
 
+/* GALLERY */
 .gallery{
-  margin-top:24px;
+  margin-top:26px;
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:12px;
+  gap:14px;
 }
+
 .gallery img{
   width:100%;
   height:120px;
   object-fit:cover;
   border-radius:14px;
   cursor:pointer;
-  transition:.4s;
+  transition:.3s;
 }
+
 .gallery img:hover{
   transform:scale(1.05);
 }
 
-/* overlay */
+/* TEXT */
+.photo-text{
+  margin-top:18px;
+  font-size:14px;
+  color:#666;
+  line-height:1.6;
+}
+
+/* POPUP */
 .overlay{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.55);
+  background:rgba(0,0,0,.6);
   backdrop-filter:blur(10px);
   display:none;
   justify-content:center;
   align-items:center;
+  z-index:10;
 }
 
 .popup{
   background:#fff;
-  border-radius:20px;
+  border-radius:22px;
   padding:18px;
-  width:90%;
-  max-width:650px;
-  display:flex;
-  gap:18px;
-  animation:fadeUp .6s ease;
+  width:600px;
 }
+
 .popup img{
   width:100%;
   max-height:65vh;
   object-fit:contain;
   border-radius:16px;
 }
-.text{
+
+.popup .text{
+  margin-top:14px;
   font-size:16px;
-  line-height:1.6;
   color:#555;
+  line-height:1.6;
 }
+
 .nav{
   display:flex;
   justify-content:space-between;
-  margin-top:12px;
+  margin-top:14px;
 }
+
 .nav button{
   border:none;
-  background:#f4a7b9;
+  background:linear-gradient(135deg,#f472b6,#ec4899);
   color:#fff;
   padding:8px 18px;
   border-radius:30px;
+  font-size:14px;
   cursor:pointer;
 }
 
-/* end */
+/* END PAGE */
 .end{
   display:none;
   position:fixed;
   inset:0;
-  background:linear-gradient(135deg,#fff1f2,#fde2e4);
+  background: linear-gradient(135deg,#f472b6,#fbcfe8,#ffffff);
   justify-content:center;
   align-items:center;
   text-align:center;
-  padding:30px;
+  z-index:20;
 }
 
 .end-content{
-  animation:fadeUp 1.4s ease forwards;
   color:#555;
+  animation:fadeUp 1.2s ease;
 }
 
-.heart{
-  font-size:32px;
+.end .heart{
+  font-size:36px;
   cursor:pointer;
-  display:inline-block;
+  margin-top:20px;
   animation:pulse 2s infinite;
 }
 
 .clue{
+  margin-top:10px;
   font-size:12px;
-  opacity:.6;
-  margin-top:8px;
+  color:#777;
+  letter-spacing:.5px;
 }
 
 .secret{
   display:none;
   margin-top:22px;
-  background:rgba(255,255,255,.6);
+  background:rgba(255,255,255,.7);
   padding:20px;
   border-radius:18px;
-  max-width:420px;
   line-height:1.7;
+}
+
+/* ANIMATION */
+@keyframes floatUp{
+  from{transform:translateY(0);opacity:.4;}
+  to{transform:translateY(-110vh);opacity:0;}
 }
 
 @keyframes fadeUp{
   from{opacity:0;transform:translateY(40px)}
   to{opacity:1;transform:translateY(0)}
 }
+
 @keyframes pulse{
   0%,100%{transform:scale(1)}
   50%{transform:scale(1.15)}
@@ -154,9 +198,7 @@ h2{
 
 <body>
 
-<audio id="bgm" loop>
-  <source src="lagu.mp3" type="audio/mpeg">
-</audio>
+<div class="hearts" id="hearts"></div>
 
 <div class="card">
   <h2>Selamat Ulang Tahun</h2>
@@ -167,25 +209,30 @@ h2{
     <img src="foto2.JPG" onclick="openPopup(1)">
     <img src="foto3.JPG" onclick="openPopup(2)">
   </div>
+
+  <p class="photo-text">
+    Tiga potret kecil dari banyak momen indah,<br>
+    semoga senyummu selalu tinggal di setiap harinya 🤍
+  </p>
 </div>
 
+<!-- POPUP -->
 <div class="overlay" id="overlay" onclick="closePopup()">
   <div class="popup" onclick="event.stopPropagation()">
-    <div style="flex:1">
-      <img id="popupImg">
-      <div class="nav">
-        <button onclick="prev()">←</button>
-        <button onclick="next()">→</button>
-      </div>
-    </div>
+    <img id="popupImg">
     <div class="text" id="popupText"></div>
+    <div class="nav">
+      <button onclick="prev()">←</button>
+      <button onclick="next()">→</button>
+    </div>
   </div>
 </div>
 
+<!-- END PAGE -->
 <div class="end" id="end">
   <div class="end-content">
     <p>
-      Terima kasih sudah lahir<br>
+      Terima kasih sudah lahir,<br>
       dan mengajarkan aku arti mencintai.
     </p>
 
@@ -193,63 +240,78 @@ h2{
     <div class="clue">clue: white love</div>
 
     <div class="secret" id="secret">
-      Aku bersyukur, bukan karena hari ini saja.  
-      Tapi karena setiap hari aku bisa menyebut namamu  
+      Aku bersyukur, bukan karena hari ini saja.<br>
+      Tapi karena setiap hari aku bisa menyebut namamu<br>
       sebagai seseorang yang paling berarti 🤍  
       <br><br>
-      — dari langit<br>
-      13 Januari 2026
+      — dari langit
     </div>
   </div>
 </div>
 
 <script>
+/* FLOATING HEART */
+const hearts=document.getElementById('hearts');
+
+function createHeart(){
+  const h=document.createElement('div');
+  h.className='heart-float';
+  h.innerHTML=Math.random()>0.5?'🤍':'💗';
+  h.style.left=Math.random()*100+'vw';
+  h.style.fontSize=16+Math.random()*24+'px';
+  h.style.animationDuration=12+Math.random()*8+'s';
+  hearts.appendChild(h);
+  setTimeout(()=>h.remove(),20000);
+}
+setInterval(createHeart,900);
+
+/* GALLERY */
 const photos=[
  {src:'foto1.JPG',text:'Hari pertama yang tanpa sadar aku ingat sampai sekarang.'},
  {src:'foto2.JPG',text:'Waktu berjalan, tapi rasanya tetap sama.'},
  {src:'foto3.JPG',text:'Semoga langkah kita selalu searah.'}
 ];
-let i=0, played=false;
+
+const overlay=document.getElementById('overlay');
+const popupImg=document.getElementById('popupImg');
+const popupText=document.getElementById('popupText');
+const end=document.getElementById('end');
+const secret=document.getElementById('secret');
+
+let i=0;
 
 function openPopup(n){
- i=n; update();
- overlay.style.display='flex';
- playMusic();
+  i=n;
+  update();
+  overlay.style.display='flex';
 }
+
 function update(){
- popupImg.src=photos[i].src;
- popupText.innerText=photos[i].text;
+  popupImg.src=photos[i].src;
+  popupText.innerText=photos[i].text;
 }
+
 function next(){
- i++;
- if(i>=photos.length){showEnd();return;}
- update();
+  i++;
+  if(i>=photos.length){
+    overlay.style.display='none';
+    end.style.display='flex';
+    return;
+  }
+  update();
 }
+
 function prev(){
- i=(i-1+photos.length)%photos.length;
- update();
+  i=(i-1+photos.length)%photos.length;
+  update();
 }
+
 function closePopup(){
- overlay.style.display='none';
+  overlay.style.display='none';
 }
-function playMusic(){
- if(played) return;
- played=true;
- bgm.volume=0;
- bgm.play();
- let v=0;
- const fade=setInterval(()=>{
-  v+=0.05;
-  if(v>=1){v=1;clearInterval(fade);}
-  bgm.volume=v;
- },200);
-}
-function showEnd(){
- overlay.style.display='none';
- setTimeout(()=>end.style.display='flex',300);
-}
+
 function openSecret(){
- secret.style.display='block';
+  secret.style.display='block';
 }
 </script>
 
