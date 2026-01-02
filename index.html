@@ -216,7 +216,10 @@ h2{
 
 <div class="hearts" id="hearts"></div>
 
-<audio id="music" src="music.mp3"></audio>
+<!-- AUDIO (FIXED & SAFE) -->
+<audio id="music" preload="auto" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
 
 <div class="card">
   <h2>Selamat Ulang Tahun</h2>
@@ -272,7 +275,6 @@ h2{
 <script>
 /* FLOATING HEART */
 const hearts=document.getElementById('hearts');
-
 function createHeart(){
   const h=document.createElement('div');
   h.className='heart-float';
@@ -305,7 +307,11 @@ function openPopup(n){
   i=n;
   update();
   overlay.style.display='flex';
-  music.play();
+
+  music.volume=0.6;
+  music.play().catch(()=>{
+    document.body.addEventListener('click',()=>music.play(),{once:true});
+  });
 }
 
 function update(){
