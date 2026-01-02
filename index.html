@@ -103,4 +103,249 @@ h2{
 
 .popup{
   background:#fff;
-  border
+  border-radius:22px;
+  padding:18px;
+  width:600px;
+  animation:popupShow .45s ease;
+}
+
+.popup img{
+  width:100%;
+  max-height:65vh;
+  object-fit:contain;
+  border-radius:16px;
+}
+
+.popup .text{
+  margin-top:14px;
+  font-size:16px;
+  color:#555;
+  line-height:1.6;
+}
+
+.nav{
+  display:flex;
+  justify-content:space-between;
+  margin-top:14px;
+}
+
+.nav button{
+  border:none;
+  background:linear-gradient(135deg,#f472b6,#ec4899);
+  color:#fff;
+  padding:8px 18px;
+  border-radius:30px;
+  font-size:14px;
+  cursor:pointer;
+}
+
+/* END PAGE */
+.end{
+  display:none;
+  position:fixed;
+  inset:0;
+  background: linear-gradient(135deg,#f472b6,#fbcfe8,#ffffff);
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  z-index:20;
+}
+
+.end-content{
+  color:#555;
+  animation:fadeUp 1.2s ease;
+}
+
+.back-btn{
+  border:none;
+  background:rgba(255,255,255,.7);
+  padding:6px 14px;
+  border-radius:20px;
+  font-size:13px;
+  color:#555;
+  cursor:pointer;
+  margin-bottom:18px;
+}
+
+.end .heart{
+  font-size:36px;
+  cursor:pointer;
+  margin-top:20px;
+  animation:pulse 2s infinite;
+}
+
+.clue{
+  margin-top:10px;
+  font-size:12px;
+  color:#777;
+}
+
+.secret{
+  display:none;
+  margin-top:22px;
+  background:rgba(255,255,255,.7);
+  padding:20px;
+  border-radius:18px;
+  line-height:1.7;
+}
+
+/* ANIMATION */
+@keyframes floatUp{
+  from{transform:translateY(0);opacity:.4;}
+  to{transform:translateY(-110vh);opacity:0;}
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(40px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes pulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.15)}
+}
+
+@keyframes popupShow{
+  from{opacity:0;transform:scale(.92)}
+  to{opacity:1;transform:scale(1)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="hearts" id="hearts"></div>
+
+<!-- AUDIO (FIXED & SAFE) -->
+<audio id="music" preload="auto" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card">
+  <h2>Selamat Ulang Tahun</h2>
+  <p class="name">Heronisa 🤍</p>
+
+  <div class="gallery">
+    <img src="foto1.JPG" onclick="openPopup(0)">
+    <img src="foto2.JPG" onclick="openPopup(1)">
+    <img src="foto3.JPG" onclick="openPopup(2)">
+  </div>
+
+  <p class="photo-text">
+    Tiga potret kecil dari banyak momen indah,<br>
+    semoga senyummu selalu tinggal di setiap harinya 🤍
+  </p>
+</div>
+
+<!-- POPUP -->
+<div class="overlay" id="overlay" onclick="closePopup()">
+  <div class="popup" onclick="event.stopPropagation()">
+    <img id="popupImg">
+    <div class="text" id="popupText"></div>
+    <div class="nav">
+      <button onclick="prev()">←</button>
+      <button onclick="next()">→</button>
+    </div>
+  </div>
+</div>
+
+<!-- END PAGE -->
+<div class="end" id="end">
+  <div class="end-content">
+    <button class="back-btn" onclick="backToGallery()">← Back</button>
+
+    <p>
+      Terima kasih sudah lahir,<br>
+      dan mengajarkan aku arti mencintai.
+    </p>
+
+    <div class="heart" onclick="openSecret()">🤍</div>
+    <div class="clue">clue: white love</div>
+
+    <div class="secret" id="secret">
+      Aku bersyukur, bukan karena hari ini saja.<br>
+      Tapi karena setiap hari aku bisa menyebut namamu<br>
+      sebagai seseorang yang paling berarti 🤍  
+      <br><br>
+      — dari langit
+    </div>
+  </div>
+</div>
+
+<script>
+/* FLOATING HEART */
+const hearts=document.getElementById('hearts');
+function createHeart(){
+  const h=document.createElement('div');
+  h.className='heart-float';
+  h.innerHTML=Math.random()>0.5?'🤍':'💗';
+  h.style.left=Math.random()*100+'vw';
+  h.style.fontSize=16+Math.random()*24+'px';
+  h.style.animationDuration=12+Math.random()*8+'s';
+  hearts.appendChild(h);
+  setTimeout(()=>h.remove(),20000);
+}
+setInterval(createHeart,1000);
+
+/* GALLERY + MUSIC */
+const photos=[
+ {src:'foto1.JPG',text:'Hari pertama yang tanpa sadar aku ingat sampai sekarang.'},
+ {src:'foto2.JPG',text:'Waktu berjalan, tapi rasanya tetap sama.'},
+ {src:'foto3.JPG',text:'Semoga langkah kita selalu searah.'}
+];
+
+const overlay=document.getElementById('overlay');
+const popupImg=document.getElementById('popupImg');
+const popupText=document.getElementById('popupText');
+const end=document.getElementById('end');
+const secret=document.getElementById('secret');
+const music=document.getElementById('music');
+
+let i=0;
+
+function openPopup(n){
+  i=n;
+  update();
+  overlay.style.display='flex';
+
+  music.volume=0.6;
+  music.play().catch(()=>{
+    document.body.addEventListener('click',()=>music.play(),{once:true});
+  });
+}
+
+function update(){
+  popupImg.src=photos[i].src;
+  popupText.innerText=photos[i].text;
+}
+
+function next(){
+  i++;
+  if(i>=photos.length){
+    overlay.style.display='none';
+    end.style.display='flex';
+    return;
+  }
+  update();
+}
+
+function prev(){
+  i=(i-1+photos.length)%photos.length;
+  update();
+}
+
+function closePopup(){
+  overlay.style.display='none';
+}
+
+function openSecret(){
+  secret.style.display='block';
+}
+
+function backToGallery(){
+  end.style.display='none';
+}
+</script>
+
+</body>
+</html>
