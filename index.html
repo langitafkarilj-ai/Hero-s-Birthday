@@ -13,7 +13,7 @@
   font-family:'Segoe UI',sans-serif;
 }
 
-/* ===== BACKGROUND GRADIENT BERGERAK PELAN ===== */
+/* BACKGROUND GRADIENT BERGERAK */
 body{
   min-height:100vh;
   background:linear-gradient(
@@ -34,21 +34,16 @@ body{
   100%{background-position:0% 50%}
 }
 
+/* CONTAINER */
 .container{
-  position:relative;
   width:100%;
   height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
-  transition:filter .4s ease;
 }
 
-/* ===== BLUR SAAT POPUP ===== */
-.blur{
-  filter:blur(6px);
-}
-
+/* CARD */
 .card{
   background:rgba(255,255,255,.9);
   padding:30px;
@@ -56,8 +51,11 @@ body{
   text-align:center;
   width:90%;
   max-width:500px;
+  position:relative;
+  z-index:2;
 }
 
+/* GALLERY */
 .gallery{
   display:flex;
   gap:15px;
@@ -77,10 +75,13 @@ body{
   transform:scale(1.05);
 }
 
+/* POPUP OVERLAY (BLUR BACKGROUND YANG BENAR) */
 .overlay{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   display:none;
   justify-content:center;
   align-items:center;
@@ -93,10 +94,11 @@ body{
   border-radius:20px;
   text-align:center;
   animation:zoom .4s ease;
+  z-index:11;
 }
 
 @keyframes zoom{
-  from{transform:scale(.8);opacity:0}
+  from{transform:scale(.85);opacity:0}
   to{transform:scale(1);opacity:1}
 }
 
@@ -105,6 +107,7 @@ body{
   border-radius:15px;
 }
 
+/* BUTTON */
 .btn{
   margin-top:15px;
   padding:8px 20px;
@@ -115,6 +118,7 @@ body{
   color:white;
 }
 
+/* END PAGE */
 .end{
   position:fixed;
   inset:0;
@@ -125,16 +129,42 @@ body{
   z-index:20;
 }
 
-.back{
-  margin-top:20px;
+.end .card{
+  cursor:default;
 }
 
-/* ===== FLOATING HEART ===== */
+/* LOVE CLICKABLE */
+.love{
+  font-size:30px;
+  margin-top:10px;
+  cursor:pointer;
+  animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.15)}
+}
+
+.clue{
+  font-size:12px;
+  margin-top:5px;
+}
+
+.secret{
+  display:none;
+  margin-top:15px;
+  font-size:14px;
+  line-height:1.6;
+}
+
+/* FLOATING HEART */
 .heart{
   position:fixed;
   bottom:-20px;
   font-size:20px;
   animation:float 8s linear infinite;
+  pointer-events:none;
 }
 
 @keyframes float{
@@ -150,7 +180,7 @@ body{
   <source src="music.mp3" type="audio/mpeg">
 </audio>
 
-<div class="container" id="container">
+<div class="container">
   <div class="card">
     <h2>Selamat Ulang Tahun</h2>
     <p>Heronisa 🤍</p>
@@ -163,24 +193,33 @@ body{
   </div>
 </div>
 
-<div class="overlay" id="overlay">
-  <div class="popup">
+<!-- POPUP -->
+<div class="overlay" id="overlay" onclick="closePopup()">
+  <div class="popup" onclick="event.stopPropagation()">
     <img id="popupImg">
     <br>
     <button class="btn" onclick="next()">Next</button>
   </div>
 </div>
 
+<!-- END -->
 <div class="end" id="end">
   <div class="card">
     <p>
       Terima kasih sudah lahir,<br>
       dan mengajarkan aku arti mencintai.
     </p>
-    <div style="font-size:30px">🤍</div>
-    <p style="font-size:12px;margin-top:5px">clue: white love</p>
 
-    <div class="back">
+    <div class="love" onclick="toggleSecret()">🤍</div>
+    <div class="clue">clue: white love</div>
+
+    <div class="secret" id="secret">
+      Aku bersyukur, bukan karena hari ini saja.<br>
+      Tapi karena setiap hari aku bisa menyebut namamu<br>
+      sebagai seseorang yang paling berarti 🤍
+    </div>
+
+    <div style="margin-top:20px">
       <button class="btn" onclick="backHome()">Back</button>
     </div>
   </div>
@@ -193,14 +232,13 @@ let i=0;
 const overlay=document.getElementById('overlay');
 const popupImg=document.getElementById('popupImg');
 const end=document.getElementById('end');
+const secret=document.getElementById('secret');
 const music=document.getElementById('music');
-const container=document.getElementById('container');
 
 function openPopup(n){
   i=n;
   popupImg.src=imgs[i];
   overlay.style.display='flex';
-  container.classList.add('blur');
 
   music.volume=0.6;
   music.play().catch(()=>{
@@ -214,15 +252,24 @@ function next(){
     popupImg.src=imgs[i];
   }else{
     overlay.style.display='none';
-    container.classList.remove('blur');
     end.style.display='flex';
   }
+}
+
+function closePopup(){
+  overlay.style.display='none';
 }
 
 function backHome(){
   end.style.display='none';
 }
 
+function toggleSecret(){
+  secret.style.display =
+    (secret.style.display === 'block') ? 'none' : 'block';
+}
+
+/* FLOATING HEART */
 function heart(){
   const h=document.createElement('div');
   h.className='heart';
@@ -232,7 +279,7 @@ function heart(){
   document.body.appendChild(h);
   setTimeout(()=>h.remove(),8000);
 }
-setInterval(heart,500);
+setInterval(heart,600);
 </script>
 
 </body>
