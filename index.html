@@ -13,6 +13,7 @@
   font-family:'Segoe UI',sans-serif;
 }
 
+/* BODY */
 body{
   min-height:100vh;
   display:flex;
@@ -20,9 +21,39 @@ body{
   align-items:center;
   overflow:hidden;
   background: linear-gradient(135deg,#f472b6,#fbcfe8,#ffffff);
+  position: relative;
 }
 
-/* FLOATING HEART */
+/* COUNTDOWN SCREEN */
+#countdownScreen{
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg,#f472b6,#fbcfe8,#ffffff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200000;
+  transition: opacity 1.2s ease;
+}
+#countdownScreen.hide{
+  opacity: 0;
+  pointer-events: none;
+}
+.countdown-box{
+  text-align: center;
+}
+.countdown-box h1{
+  font-size: 42px;
+  color: #ec4899;
+  font-weight: 700;
+}
+.countdown-box p{
+  margin-top: 10px;
+  font-size: 14px;
+  color: #777;
+}
+
+/* FLOATING HEARTS */
 .hearts{
   position:fixed;
   inset:0;
@@ -35,6 +66,10 @@ body{
   opacity:.5;
   animation:floatUp linear infinite;
 }
+@keyframes floatUp{
+  from{transform:translateY(0);opacity:.5}
+  to{transform:translateY(-115vh);opacity:0}
+}
 
 /* CLICK LOVE EFFECT */
 .click-love{
@@ -44,19 +79,10 @@ body{
   animation:lovePop 1.2s ease forwards;
   z-index:999;
 }
-
 @keyframes lovePop{
-  0%{
-    transform:translate(-50%,-50%) scale(0.6);
-    opacity:0;
-  }
-  30%{
-    opacity:1;
-  }
-  100%{
-    transform:translate(-50%,-80%) scale(2.4);
-    opacity:0;
-  }
+  0%{transform:translate(-50%,-50%) scale(0.6);opacity:0;}
+  30%{opacity:1;}
+  100%{transform:translate(-50%,-80%) scale(2.4);opacity:0;}
 }
 
 /* CARD */
@@ -70,7 +96,6 @@ body{
   text-align:center;
   box-shadow:0 30px 60px rgba(244,114,182,.35);
 }
-
 h2{font-size:28px}
 .name{margin-top:8px;font-size:18px;color:#888}
 
@@ -90,7 +115,6 @@ h2{font-size:28px}
   transition:.3s;
 }
 .gallery img:hover{transform:scale(1.06)}
-
 .photo-text{
   margin-top:18px;
   font-size:14px;
@@ -239,10 +263,6 @@ h2{font-size:28px}
 }
 
 /* ANIM */
-@keyframes floatUp{
-  from{transform:translateY(0);opacity:.5}
-  to{transform:translateY(-115vh);opacity:0}
-}
 @keyframes pulse{
   0%,100%{transform:scale(1)}
   50%{transform:scale(1.18)}
@@ -251,20 +271,45 @@ h2{font-size:28px}
   from{opacity:0;transform:translateY(30px)}
   to{opacity:1;transform:translateY(0)}
 }
+
+/* LOVE RISE */
+.love-rise {
+  position: fixed;
+  left: 0;
+  bottom: -30px;
+  font-size: 24px;
+  animation: rise 4s linear forwards;
+  pointer-events: none;
+  z-index: 100000;
+}
+@keyframes rise{
+  from{transform:translateY(0) scale(1);opacity:1}
+  to{transform:translateY(-110vh) scale(1.6);opacity:0}
+}
 </style>
 </head>
-
 <body>
 
+<!-- FLOATING HEARTS -->
 <div class="hearts" id="hearts"></div>
 
+<!-- AUDIO -->
 <audio id="music" preload="auto" loop>
   <source src="music.mp3" type="audio/mpeg">
 </audio>
 
+<!-- COUNTDOWN -->
+<div id="countdownScreen">
+  <div class="countdown-box">
+    <h1 id="countdownText">Loading...</h1>
+    <p>Lagi menuju hari spesial 🤍</p>
+  </div>
+</div>
+
+<!-- CARD -->
 <div class="card">
-  <h2>Selamat Ulang Tahun</h2>
-  <p class="name">Heronisa 🤍</p>
+  <h2>Selamat Ulang Tahun Sayangku</h2>
+  <p class="name">For Heronisa 🤍</p>
 
   <div class="gallery">
     <img src="foto1.JPG" onclick="openPopup(0)">
@@ -273,11 +318,12 @@ h2{font-size:28px}
   </div>
 
   <p class="photo-text">
-    Tiga potret kecil dari banyak momen indah,<br>
-    semoga senyummu selalu tinggal di setiap harinya 🤍
+    Haii sayang selamatt ulang tahunn,<br>
+    Cintaaaa kamuuu selaluuu sayaggg kuuuu💗
   </p>
 </div>
 
+<!-- POPUP -->
 <div class="overlay" id="overlay" onclick="closePopup()">
   <div class="popup" onclick="event.stopPropagation()">
     <div class="slider" id="slider"></div>
@@ -296,11 +342,12 @@ h2{font-size:28px}
   </div>
 </div>
 
+<!-- END PAGE -->
 <div class="end" id="end" onclick="tapToBack()">
   <div onclick="event.stopPropagation()">
     <p>
-      Terima kasih sudah lahir,<br>
-      dan mengajarkan aku arti mencintai.
+      Terima kasih yahh sudah lahir di duniaa inii untukk menemanii langitt,<br>
+      terimakasii juga udaa ngasihh tauu gimanaa si rasaa nyaa di cintaii
     </p>
 
     <div class="heart" id="love" onclick="openSecret()">🤍</div>
@@ -308,9 +355,9 @@ h2{font-size:28px}
     <div class="secret" id="secret">
       <img src="foto-end.JPG" id="secretImg">
       <p>
-        Aku bersyukur, bukan karena hari ini saja.<br>
-        Tapi karena setiap hari aku bisa menyebut namamu<br>
-        sebagai seseorang yang paling berarti 🤍<br><br>
+        Semoga di umur Hero yang ke-14 ini<br>
+        kamu lebih bijakk yaa dalam milih keputusann<br>
+        kamu lebih mencintai dirii sendirii nggak, jahat sama diri sendiri<br>kamu lebih dicinatii sama orang orang, orang orang lebih peduli sama kamu<br>kamuu jugaaa lebih deket samaa Allah inget allah di semua cobaan kamu.<br>Panjang umur sehat selalu yaa sayanggkuuu langitt sayangg bangett samaa kamu🤍<br>
         — dari langit
       </p>
       <div class="clue bottom">tap anywhere to back</div>
@@ -319,7 +366,7 @@ h2{font-size:28px}
 </div>
 
 <script>
-/* FLOATING HEART */
+/* FLOATING HEARTS */
 const hearts=document.getElementById('hearts');
 setInterval(()=>{
   const h=document.createElement('div');
@@ -343,11 +390,11 @@ document.addEventListener('click',(e)=>{
   setTimeout(()=>love.remove(),1200);
 });
 
-/* DATA */
+/* GALLERY POPUP */
 const photos=[
- {src:'foto1.JPG',text:'Hari pertama yang tanpa sadar aku ingat sampai sekarang.'},
- {src:'foto2.JPG',text:'Waktu berjalan, tapi rasanya tetap sama.'},
- {src:'foto3.JPG',text:'Semoga langkah kita selalu searah.'}
+ {src:'foto1.JPG',text:'Ini pertama kali kita foto bareng berdua lilbit awkward maybe, tapi disitu kita berdua kayaa masih malu malu gituu wkwkw, tapi akuu senengg bangett bisaa fotoo samaaa kamuuu senanggg sekalyyy, I lovee youu sayangkuuu'},
+ {src:'foto2.JPG',text:'Inii fotoo pertamaa kalii kitaa ngedet berduwa jujurrr maluu tapiii senenggg jugaa kaloo kamuu tauu ituu akuu deg degann bangett seiuss  endaa boong anitt. Langittt sayanggg heroooo.'},
+ {src:'foto3.JPG',text:'Btw ngga kerasaaa yahhh kitaa udahh satu tahunnn bersamaa semogaaa kitaa barengg barengg teruss yahh sampeee surgaa nantiii aminnn. Cintaaa kamuuu'}
 ];
 
 const overlay=document.getElementById('overlay');
@@ -379,7 +426,6 @@ function fadeInMusic(){
     if(v<0.6){v+=0.02;music.volume=v}else clearInterval(f);
   },100);
 }
-
 function fadeOutMusic(){
   let v=music.volume;
   const f=setInterval(()=>{
@@ -394,7 +440,6 @@ function openPopup(n){
   updateSlide();
   if(!musicStarted){musicStarted=true;fadeInMusic();}
 }
-
 function updateSlide(){
   slides.forEach((s,idx)=>{
     s.classList.remove('active','prev');
@@ -405,7 +450,6 @@ function updateSlide(){
   dots.forEach((d,idx)=>d.classList.toggle('active',idx===i));
   prevBtn.classList.toggle('disabled',i===0);
 }
-
 function next(){
   i++;
   if(i>=photos.length){
@@ -437,6 +481,31 @@ function tapToBack(){
     fadeInMusic();
   },900);
 }
+
+/* COUNTDOWN + LOVE RISE (langsung hari ini, floating love 5 detik) */
+const targetDate = new Date().getTime(); // countdown selesai sekarang
+let loveTriggered=false;
+
+function riseLove(){
+  const l=document.createElement('div');
+  l.className='love-rise';
+  l.innerHTML=Math.random()>0.5?'🤍':'💗';
+  l.style.left=Math.random()*100+'vw';
+  l.style.fontSize=20+Math.random()*24+'px';
+  document.body.appendChild(l);
+  setTimeout(()=>l.remove(),4000);
+}
+
+// langsung hide countdown dan start love rise
+const screen=document.getElementById('countdownScreen');
+screen.classList.add('hide');
+
+if(!loveTriggered){
+  loveTriggered=true;
+  const loveInterval = setInterval(riseLove, 280); // muncul tiap 0,28 detik
+  setTimeout(()=>clearInterval(loveInterval), 5000); // berhenti setelah 5 detik
+}
+
 </script>
 
 </body>
